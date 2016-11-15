@@ -16,9 +16,11 @@ public class Main {
 
 		FIFO fifo = new FIFO(array_size, processos);
 		OPT opt = new OPT(array_size, processos);
+		LRU lru = new LRU(array_size, processos);
 
 		System.out.println(fifo.toString());
 		System.out.println(opt.toString());
+		System.out.println(lru.toString());
 	}
 }
 
@@ -98,7 +100,6 @@ class OPT{
 	}
 
 	public void Simulate(){
-		int i = 0;
 		int less_number_index = 0;
 		boolean can_run = true;
 
@@ -153,4 +154,74 @@ class OPT{
 
 class LRU{
 
+	private int[] memory;
+	ArrayList<Integer> process_queue = new ArrayList<Integer>();
+	ArrayList<Integer> stack = new ArrayList<Integer>();
+	private int pages_fault = 0;
+
+	public LRU(int memory_size, ArrayList<Integer> processos){	
+		memory = new int[memory_size];
+		
+		for(int i = 0; i < processos.size(); i++){
+			process_queue.add(processos.get(i));
+		}
+		for(int i = 0; i < memory.length; i++){
+			memory[i] = process_queue.get(0);
+			process_queue.remove(0);
+			stack.add(memory[i]);
+			pages_fault++;
+		}
+		
+		Simulate();
+	}
+
+	public void Simulate(){
+		boolean can_run = true;
+
+		while(!process_queue.isEmpty()){
+			for(int i = 0; i<stack.size(); i++){
+				//System.out.println("Found the number: " + Integer.toString(stack.get(i)) + " in stack");
+				//System.out.println("Im looking for number: " + Integer.toString(process_queue.get(0)) + " in stack");
+				if(stack.get(i) == process_queue.get(0)){
+					int aux = stack.get(i);
+					//System.out.println("Found the number: " + Integer.toString(aux) + " in stack");
+					stack.remove(i);
+					stack.add(aux);
+					process_queue.remove(0);
+					//System.out.println("Next in Queue: " + Integer.toString(process_queue.get(0)));
+					//for(int j = 0; j<stack.size(); j++){
+					//	System.out.print("[" + Integer.toString(stack.get(j)) + "]");
+					//}
+					//System.out.println("");
+					can_run = false;
+					break;
+				}
+			}
+			if(can_run){
+				stack.add(process_queue.get(0));
+				for(int k = 0; k<memory.length; k++){
+					if(stack.get(0) == memory[k]){
+						//System.out.println("The Number: " + Integer.toString(process_queue.get(0)) + " Will enter in the place index: " + Integer.toString(stack.get(0)));
+						stack.remove(0);
+						memory[k] = process_queue.get(0);
+						process_queue.remove(0);
+						pages_fault++;
+
+						//if(!process_queue.isEmpty())
+						//	System.out.println("Next in Queue: " + Integer.toString(process_queue.get(0)));
+						//for(int j = 0; j<stack.size(); j++){
+						//	System.out.print("[" + Integer.toString(stack.get(j)) + "]");
+						//}
+						//System.out.println("");
+						break;
+					}
+				}
+			}
+			can_run = true;
+		}
+	}
+
+	public String toString(){
+		return "LRU: " + Integer.toString(pages_fault);
+	}
 }
