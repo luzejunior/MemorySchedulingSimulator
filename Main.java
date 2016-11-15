@@ -42,18 +42,26 @@ class FIFO{
 
 	public void Simulate(){
 		int i = 0;
+		boolean can_run = true;
 		while(!process_queue.isEmpty()){
-			if(!(process_queue.get(0) == stack[i])){
+			System.out.println("Queue: " + Integer.toString(process_queue.get(0)));
+			for(int k = 0; k < stack.length; k++){
+				if(!process_queue.isEmpty()){
+					if(process_queue.get(0) == stack[k]){
+						process_queue.remove(0);
+						can_run = false;
+					}
+				}
+			}
+			if(can_run){
 				stack[i] = process_queue.get(0);
 				process_queue.remove(0);
 				pages_fault++;
 				i++;
 			}
-			else{
-				process_queue.remove(0);
-				i++;
-			}
 			i = i % stack.length;
+			can_run = true;
+			System.out.println("Pages Fault: " + Integer.toString(pages_fault));
 		}
 	}
 
