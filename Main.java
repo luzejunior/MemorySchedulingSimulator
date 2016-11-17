@@ -105,11 +105,13 @@ class OPT{
 
 		while(!process_queue.isEmpty()){
 			//System.out.println("Queue: " + Integer.toString(process_queue.get(0)));
+			//System.out.println("Current Queue: " + Integer.toString(process_queue.get(0)));
 			for(int k = 0; k < memory.length; k++){
 				if(!process_queue.isEmpty()){
 					if(process_queue.get(0) == memory[k]){
 						process_queue.remove(0);
 						can_run = false;
+						break;
 					}
 				}
 			}
@@ -120,8 +122,11 @@ class OPT{
 				process_queue.remove(0);
 				pages_fault++;
 			}
-
 			can_run = true;
+			//for(int j = 0; j<memory.length; j++){
+			//	System.out.print("[" + Integer.toString(memory[j]) + "]");
+			// 	}
+			//System.out.println("");
 			//System.out.println("Pages Fault: " + Integer.toString(pages_fault));
 		}
 	}	
@@ -130,8 +135,9 @@ class OPT{
 		int less_number_index = 0;
 		int less_number_counter = 999;
 		int current_number_counter = 0;
+		int i = 0;
 		
-		for(int i = 0; i<memory.length; i++){
+		for(i = 0; i<memory.length; i++){
 			for(int j = 0; j<process_queue.size(); j++){
 				if(process_queue.get(j) == memory[i]){
 					current_number_counter++;
@@ -141,6 +147,7 @@ class OPT{
 				less_number_counter = current_number_counter;
 				less_number_index = i;
 			}
+			current_number_counter = 0;
 		}
 
 		return less_number_index;
