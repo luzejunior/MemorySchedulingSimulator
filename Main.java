@@ -125,7 +125,7 @@ class OPT{
 			can_run = true;
 			//for(int j = 0; j<memory.length; j++){
 			//	System.out.print("[" + Integer.toString(memory[j]) + "]");
-			// 	}
+			//}
 			//System.out.println("");
 			//System.out.println("Pages Fault: " + Integer.toString(pages_fault));
 		}
@@ -147,6 +147,8 @@ class OPT{
 				less_number_counter = current_number_counter;
 				less_number_index = i;
 			}
+			else if(less_number_counter == current_number_counter)
+				less_number_index = i;
 			current_number_counter = 0;
 		}
 
