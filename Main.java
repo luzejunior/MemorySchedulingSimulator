@@ -33,16 +33,25 @@ class FIFO{
 
 	public FIFO(int memory_size, ArrayList<Integer> processos){
 		memory = new int[memory_size];
+		boolean can_run = true;
 
 		for(int i = 0; i < processos.size(); i++){
 			process_queue.add(processos.get(i));
 		}
-		for(int i = 0; i < memory.length; i++){
-			memory[i] = process_queue.get(0);
-			process_queue.remove(0);
-			pages_fault++;
+		for(int k = 0; k < memory_size; k++){
+			for(int i = 0; i < memory.length; i++){
+				if(memory[i] == process_queue.get(0)){
+					process_queue.remove(0);
+					can_run = false;
+				}
+			}
+			if(can_run){
+				memory[k] = process_queue.get(0);
+				process_queue.remove(0);
+				pages_fault++;
+			}
+			can_run = true;
 		}
-
 		Simulate();
 	}
 
@@ -86,14 +95,24 @@ class OPT{
 
 	public OPT(int memory_size, ArrayList<Integer> processos){	
 		memory = new int[memory_size];
+		boolean can_run = true;
 		
 		for(int i = 0; i < processos.size(); i++){
 			process_queue.add(processos.get(i));
 		}
-		for(int i = 0; i < memory.length; i++){
-			memory[i] = process_queue.get(0);
-			process_queue.remove(0);
-			pages_fault++;
+		for(int k = 0; k < memory_size; k++){
+			for(int i = 0; i < memory.length; i++){
+				if(memory[i] == process_queue.get(0)){
+					process_queue.remove(0);
+					can_run = false;
+				}
+			}
+			if(can_run){
+				memory[k] = process_queue.get(0);
+				process_queue.remove(0);
+				pages_fault++;
+			}
+			can_run = true;
 		}
 		
 		Simulate();
@@ -170,15 +189,26 @@ class LRU{
 
 	public LRU(int memory_size, ArrayList<Integer> processos){	
 		memory = new int[memory_size];
+		boolean can_run = true;
 		
 		for(int i = 0; i < processos.size(); i++){
 			process_queue.add(processos.get(i));
 		}
-		for(int i = 0; i < memory.length; i++){
-			memory[i] = process_queue.get(0);
-			process_queue.remove(0);
-			stack.add(memory[i]);
-			pages_fault++;
+
+		for(int k = 0; k < memory_size; k++){
+			for(int i = 0; i < memory.length; i++){
+				if(memory[i] == process_queue.get(0)){
+					process_queue.remove(0);
+					can_run = false;
+				}
+			}
+			if(can_run){
+				memory[k] = process_queue.get(0);
+				process_queue.remove(0);
+				stack.add(memory[k]);
+				pages_fault++;
+			}
+			can_run = true;
 		}
 		
 		Simulate();
